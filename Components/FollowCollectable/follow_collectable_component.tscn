@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwt01ijkpc6y1"]
+
+[ext_resource type="Script" uid="uid://li42uh0hqcoy" path="res://Components/FollowCollectable/follow_collectable_component.gd" id="1_3kpm4"]
+
+[node name="FollowCollectableComponent" type="Node"]
+script = ExtResource("1_3kpm4")
+following_weight = 0.02

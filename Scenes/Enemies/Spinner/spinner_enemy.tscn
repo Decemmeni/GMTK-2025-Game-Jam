@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://cv65bitj5nmw0"]
+
+[ext_resource type="Script" uid="uid://bkc2mwk6skbeu" path="res://Scenes/Enemies/Spinner/spinner_enemy.gd" id="1_yilcq"]
+[ext_resource type="PackedScene" uid="uid://c4yt1cdfnncjv" path="res://Components/Hitbox/hitbox_component.tscn" id="2_xc5s5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tmw2c"]
+
+[node name="SpinnerEnemy" type="Node2D"]
+script = ExtResource("1_yilcq")
+
+[node name="TopBlade" parent="." instance=ExtResource("2_xc5s5")]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopBlade"]
+shape = SubResource("CircleShape2D_tmw2c")
+debug_color = Color(0.545631, 0.0406579, 0.200142, 0.42)
+
+[node name="BottomBlade" parent="." instance=ExtResource("2_xc5s5")]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomBlade"]
+shape = SubResource("CircleShape2D_tmw2c")
+debug_color = Color(0.545631, 0.0406579, 0.200142, 0.42)
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(0, 0, 0, 0)
+width = 2.0

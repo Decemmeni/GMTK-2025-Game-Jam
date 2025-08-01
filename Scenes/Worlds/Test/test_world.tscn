@@ -1,0 +1,199 @@
+[gd_scene load_steps=13 format=3 uid="uid://dnlg6i7ynoct5"]
+
+[ext_resource type="PackedScene" uid="uid://dyoi8ykgssvy1" path="res://Scenes/GameMechanic/Bubble/bubble.tscn" id="1_4sdeg"]
+[ext_resource type="PackedScene" uid="uid://cv65bitj5nmw0" path="res://Scenes/Enemies/Spinner/spinner_enemy.tscn" id="2_0767h"]
+[ext_resource type="PackedScene" uid="uid://clcwvobqqgbgo" path="res://Scenes/Player/player.tscn" id="2_fjvhe"]
+[ext_resource type="PackedScene" uid="uid://7jo1vmq3vra3" path="res://Scenes/GameMechanic/Treasure/treasure.tscn" id="3_5wvkv"]
+[ext_resource type="AudioStream" uid="uid://c6x7is7xt8ms6" path="res://Music/gamejamloop1.mp3" id="4_5l3ce"]
+[ext_resource type="PackedScene" uid="uid://cd3u88j4sqel2" path="res://Scenes/GameMechanic/Key/key.tscn" id="4_g13k6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0767h"]
+radius = 80.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5l3ce"]
+radius = 55.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wm4eu"]
+radius = 120.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5wvkv"]
+radius = 55.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_g13k6"]
+radius = 140.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fjvhe"]
+radius = 60.0
+
+[node name="TestWorld" type="Node2D"]
+
+[node name="Bubble" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(130, 110)
+
+[node name="SpinnerEnemy" parent="Bubble" instance=ExtResource("2_0767h")]
+
+[node name="Bubble2" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(261, 97)
+
+[node name="Treasure" parent="Bubble2" instance=ExtResource("3_5wvkv")]
+
+[node name="Bubble3" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(216, 206)
+
+[node name="Key" parent="Bubble3" instance=ExtResource("4_g13k6")]
+
+[node name="Bubble4" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(404, 82)
+
+[node name="Bubble5" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(424, 228)
+
+[node name="Bubble7" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(508, -14)
+
+[node name="Bubble8" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(540, 77)
+
+[node name="Bubble9" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(654, 1)
+
+[node name="CollisionShape2D" parent="Bubble9/Area2D" index="0"]
+shape = SubResource("CircleShape2D_0767h")
+
+[node name="Bubble11" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(783, -32)
+
+[node name="CollisionShape2D" parent="Bubble11/Area2D" index="0"]
+shape = SubResource("CircleShape2D_0767h")
+
+[node name="Bubble12" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(913, -88)
+
+[node name="CollisionShape2D" parent="Bubble12/Area2D" index="0"]
+shape = SubResource("CircleShape2D_0767h")
+
+[node name="Bubble16" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(918, 215)
+
+[node name="CollisionShape2D" parent="Bubble16/Area2D" index="0"]
+shape = SubResource("CircleShape2D_0767h")
+
+[node name="Bubble17" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1049, 283)
+
+[node name="CollisionShape2D" parent="Bubble17/Area2D" index="0"]
+shape = SubResource("CircleShape2D_0767h")
+
+[node name="Bubble18" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1257, 254)
+
+[node name="CollisionShape2D" parent="Bubble18/Area2D" index="0"]
+shape = SubResource("CircleShape2D_0767h")
+
+[node name="Bubble19" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1432, 344)
+
+[node name="CollisionShape2D" parent="Bubble19/Area2D" index="0"]
+shape = SubResource("CircleShape2D_0767h")
+
+[node name="Bubble20" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1378, 242)
+
+[node name="CollisionShape2D" parent="Bubble20/Area2D" index="0"]
+shape = SubResource("CircleShape2D_5l3ce")
+
+[node name="Bubble21" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1330, 359)
+
+[node name="CollisionShape2D" parent="Bubble21/Area2D" index="0"]
+shape = SubResource("CircleShape2D_5l3ce")
+
+[node name="Bubble22" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1154, 243)
+
+[node name="CollisionShape2D" parent="Bubble22/Area2D" index="0"]
+shape = SubResource("CircleShape2D_5l3ce")
+
+[node name="Bubble23" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1166, 143)
+
+[node name="CollisionShape2D" parent="Bubble23/Area2D" index="0"]
+shape = SubResource("CircleShape2D_5l3ce")
+
+[node name="Bubble24" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1233, 78)
+
+[node name="CollisionShape2D" parent="Bubble24/Area2D" index="0"]
+shape = SubResource("CircleShape2D_5l3ce")
+
+[node name="Bubble25" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1317, 22)
+
+[node name="CollisionShape2D" parent="Bubble25/Area2D" index="0"]
+position = Vector2(47, -20)
+shape = SubResource("CircleShape2D_wm4eu")
+
+[node name="Bubble13" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1110, -118)
+
+[node name="CollisionShape2D" parent="Bubble13/Area2D" index="0"]
+shape = SubResource("CircleShape2D_0767h")
+
+[node name="Bubble14" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1027, -25)
+
+[node name="CollisionShape2D" parent="Bubble14/Area2D" index="0"]
+shape = SubResource("CircleShape2D_5wvkv")
+
+[node name="Bubble15" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(1054, 72)
+
+[node name="CollisionShape2D" parent="Bubble15/Area2D" index="0"]
+shape = SubResource("CircleShape2D_5wvkv")
+
+[node name="Bubble10" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(731, 144)
+
+[node name="CollisionShape2D" parent="Bubble10/Area2D" index="0"]
+shape = SubResource("CircleShape2D_g13k6")
+
+[node name="Bubble6" parent="." instance=ExtResource("1_4sdeg")]
+position = Vector2(517, 315)
+
+[node name="CollisionShape2D" parent="Bubble6/Area2D" index="0"]
+shape = SubResource("CircleShape2D_fjvhe")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 88.0
+offset_top = 67.0
+offset_right = 173.0
+offset_bottom = 90.0
+text = "Seclud@ad"
+
+[node name="Player" parent="." node_paths=PackedStringArray("current_bubble") instance=ExtResource("2_fjvhe")]
+position = Vector2(104, 161)
+current_bubble = NodePath("../Bubble")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_5l3ce")
+autoplay = true
+parameters/looping = true
+
+[editable path="Bubble9"]
+[editable path="Bubble11"]
+[editable path="Bubble12"]
+[editable path="Bubble16"]
+[editable path="Bubble17"]
+[editable path="Bubble18"]
+[editable path="Bubble19"]
+[editable path="Bubble20"]
+[editable path="Bubble21"]
+[editable path="Bubble22"]
+[editable path="Bubble23"]
+[editable path="Bubble24"]
+[editable path="Bubble25"]
+[editable path="Bubble13"]
+[editable path="Bubble14"]
+[editable path="Bubble15"]
+[editable path="Bubble10"]
+[editable path="Bubble6"]

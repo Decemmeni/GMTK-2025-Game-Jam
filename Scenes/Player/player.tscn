@@ -1,0 +1,67 @@
+[gd_scene load_steps=9 format=3 uid="uid://clcwvobqqgbgo"]
+
+[ext_resource type="Script" uid="uid://c4kkfminulbk" path="res://Scenes/Player/player.gd" id="1_uvnfx"]
+[ext_resource type="PackedScene" uid="uid://bf68et1ivv1g1" path="res://Components/Health/health_component.tscn" id="2_a3d8c"]
+[ext_resource type="PackedScene" uid="uid://ccmg5lvx3k17i" path="res://Components/Hurtbox/hurtbox_component.tscn" id="3_xpcdj"]
+[ext_resource type="AudioStream" uid="uid://c8b2dbwr5dfv8" path="res://SFX/Slide.wav" id="4_mtuoh"]
+[ext_resource type="AudioStream" uid="uid://brs4ujxien7q" path="res://SFX/Transition.wav" id="5_htcer"]
+[ext_resource type="PackedScene" uid="uid://dwt01ijkpc6y1" path="res://Components/FollowCollectable/follow_collectable_component.tscn" id="6_dd0ac"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uvnfx"]
+radius = 5.0
+height = 16.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uvnfx"]
+radius = 9.0
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_uvnfx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_uvnfx")
+debug_color = Color(0, 0.434755, 0.193969, 0.42)
+
+[node name="BubbleDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BubbleDetector"]
+shape = SubResource("CircleShape2D_uvnfx")
+debug_color = Color(0.578135, 0.546662, 0.235414, 0.42)
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_a3d8c")]
+
+[node name="CameraPivot" type="Node" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="CameraPivot"]
+process_priority = 1
+position = Vector2(0, -59)
+zoom = Vector2(0.75, 0.75)
+position_smoothing_enabled = true
+
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health_component") instance=ExtResource("3_xpcdj")]
+collision_layer = 2
+collision_mask = 0
+health_component = NodePath("../HealthComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+shape = SubResource("CapsuleShape2D_uvnfx")
+debug_color = Color(0, 0.434755, 0.193969, 0.42)
+
+[node name="SlidePlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_mtuoh")
+volume_db = -40.0
+autoplay = true
+playback_type = 1
+
+[node name="BubbleTransitionPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_htcer")
+volume_db = 5.0
+
+[node name="FollowCollectableComponent" parent="." instance=ExtResource("6_dd0ac")]
+
+[connection signal="switched_bubble" from="." to="." method="switch_camera"]
+[connection signal="area_entered" from="BubbleDetector" to="." method="_on_bubble_detector_area_entered"]
+[connection signal="area_exited" from="BubbleDetector" to="." method="_on_bubble_detector_area_exited"]
