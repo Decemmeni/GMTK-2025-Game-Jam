@@ -2,6 +2,7 @@ extends CharacterBody2D
 class_name Player
 
 @export var max_rotation_speed : float = 2.5
+@export var extra_rotation_speed : float = 0
 @export var base_radius : float = 80.0
 @export var acceleration : float = 0.1
 @export var deceleration : float = 0.1
@@ -53,8 +54,8 @@ func move(d : float) -> void:
 		current_rotation_speed = move_toward(current_rotation_speed, 0, deceleration * d)
 		return
 	
-	var speed_multiplier : float = base_radius / current_bubble.collision_shape_2d.shape.radius
-	var end_speed : float = dir * max_rotation_speed * d * speed_multiplier
+	var speed_multiplier : float = base_radius / current_bubble.collision_shape_2d.shape.radius # Make sure larger bubbles take longer
+	var end_speed : float = dir * (max_rotation_speed + extra_rotation_speed) * d * speed_multiplier
 	current_rotation_speed = move_toward(current_rotation_speed ,end_speed, acceleration * d)
 	
 	
@@ -85,7 +86,7 @@ func _on_bubble_detector_area_exited(_area: Area2D) -> void:
 func switch_camera() -> void:
 	camera_2d.global_position = current_bubble.global_position
 
-func play_slide(d : float) -> void:
+func play_slide(_d : float) -> void:
 	#print(slide_player.volume_db)
 
 	var dir : float = Input.get_action_raw_strength("left") - Input.get_action_raw_strength("right")

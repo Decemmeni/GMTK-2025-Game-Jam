@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dg82yaggdces8"]
+
+[ext_resource type="Script" uid="uid://cmjapaby1wuwm" path="res://Components/LookAt/look_at_component.gd" id="1_adq0x"]
+
+[node name="LookAtComponent" type="Node"]
+script = ExtResource("1_adq0x")

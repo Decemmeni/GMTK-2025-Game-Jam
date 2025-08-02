@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dnlg6i7ynoct5"]
+[gd_scene load_steps=14 format=3 uid="uid://dnlg6i7ynoct5"]
 
 [ext_resource type="PackedScene" uid="uid://dyoi8ykgssvy1" path="res://Scenes/GameMechanic/Bubble/bubble.tscn" id="1_4sdeg"]
 [ext_resource type="PackedScene" uid="uid://cv65bitj5nmw0" path="res://Scenes/Enemies/Spinner/spinner_enemy.tscn" id="2_0767h"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://7jo1vmq3vra3" path="res://Scenes/GameMechanic/Treasure/treasure.tscn" id="3_5wvkv"]
 [ext_resource type="AudioStream" uid="uid://c6x7is7xt8ms6" path="res://Music/gamejamloop1.mp3" id="4_5l3ce"]
 [ext_resource type="PackedScene" uid="uid://cd3u88j4sqel2" path="res://Scenes/GameMechanic/Key/key.tscn" id="4_g13k6"]
+[ext_resource type="PackedScene" uid="uid://cyk72tb2fgma4" path="res://Scenes/Enemies/Cannon/Cannon.tscn" id="5_wm4eu"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0767h"]
 radius = 80.0
@@ -45,8 +46,12 @@ position = Vector2(216, 206)
 [node name="Bubble4" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(404, 82)
 
+[node name="Key" parent="Bubble4" instance=ExtResource("4_g13k6")]
+
 [node name="Bubble5" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(424, 228)
+
+[node name="Key" parent="Bubble5" instance=ExtResource("4_g13k6")]
 
 [node name="Bubble7" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(508, -14)
@@ -178,6 +183,9 @@ current_bubble = NodePath("../Bubble")
 stream = ExtResource("4_5l3ce")
 autoplay = true
 parameters/looping = true
+
+[node name="Cannon" parent="." instance=ExtResource("5_wm4eu")]
+position = Vector2(399, -67)
 
 [editable path="Bubble9"]
 [editable path="Bubble11"]

@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxmm70rsheink"]
+
+[ext_resource type="Script" uid="uid://bbvsj5fnfpmwq" path="res://Scenes/GameMechanic/PowerUps/Shield/shield_powerup.gd" id="1_7pc0f"]
+[ext_resource type="PackedScene" uid="uid://b4g6c6d8fqd2c" path="res://Components/PowerUp/power_up_component.tscn" id="1_p4qls"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7pc0f"]
+radius = 9.0
+
+[node name="ShieldPowerup" type="Node2D"]
+script = ExtResource("1_7pc0f")
+
+[node name="PowerUpComponent" parent="." instance=ExtResource("1_p4qls")]
+
+[node name="ShieldArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShieldArea"]
+scale = Vector2(2.05248, 2.05248)
+shape = SubResource("CircleShape2D_7pc0f")
+debug_color = Color(0.162915, 0.56208, 0.844188, 0.42)
+
+[connection signal="body_entered" from="ShieldArea" to="." method="_on_shield_area_body_entered"]

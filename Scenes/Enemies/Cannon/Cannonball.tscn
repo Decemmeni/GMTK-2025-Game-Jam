@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://pthw705u6i3c"]
+
+[ext_resource type="PackedScene" uid="uid://cei5jq8q3g47g" path="res://Components/Projectile/projectile_component.tscn" id="1_knpwr"]
+[ext_resource type="PackedScene" uid="uid://c4yt1cdfnncjv" path="res://Components/Hitbox/hitbox_component.tscn" id="2_vnp3y"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_oxa74"]
+
+[node name="Cannonball" type="CharacterBody2D"]
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_oxa74")
+debug_color = Color(0.411851, 0.014551, 0.0167881, 0.42)
+
+[node name="ProjectileComponent" parent="." instance=ExtResource("1_knpwr")]
+
+[node name="HitboxComponent" parent="." instance=ExtResource("2_vnp3y")]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("CircleShape2D_oxa74")
+debug_color = Color(0.411851, 0.014551, 0.0167881, 0.42)

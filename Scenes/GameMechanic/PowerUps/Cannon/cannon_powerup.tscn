@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=3 uid="uid://cb2y4ij610ok2"]
+
+[ext_resource type="PackedScene" uid="uid://b4g6c6d8fqd2c" path="res://Components/PowerUp/power_up_component.tscn" id="1_ekj7a"]
+[ext_resource type="Script" uid="uid://d05jrgj4vj6ch" path="res://Scenes/GameMechanic/PowerUps/Cannon/cannon_powerup.gd" id="1_lbnqh"]
+[ext_resource type="PackedScene" uid="uid://dg82yaggdces8" path="res://Components/LookAt/look_at_component.tscn" id="3_6q1qm"]
+[ext_resource type="PackedScene" uid="uid://5neyynio6y20" path="res://Components/Range/range_component.tscn" id="3_if510"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_if510"]
+radius = 105.043
+
+[node name="CannonPowerup" type="Node2D"]
+script = ExtResource("1_lbnqh")
+
+[node name="PowerUpComponent" parent="." instance=ExtResource("1_ekj7a")]
+
+[node name="Duration" type="Timer" parent="."]
+wait_time = 30.0
+autostart = true
+
+[node name="RangeComponent" parent="." instance=ExtResource("3_if510")]
+collision_mask = 64
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RangeComponent"]
+shape = SubResource("CircleShape2D_if510")
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(0, -24)
+
+[node name="ColorRect" type="ColorRect" parent="Node2D"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.561937, 0.26584, 0.448063, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="Node2D"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -3.0
+offset_right = 10.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.19572, 0.494462)
+color = Color(0.561937, 0.26584, 0.448063, 1)
+
+[node name="LookAtComponent" parent="Node2D" node_paths=PackedStringArray("range_component") instance=ExtResource("3_6q1qm")]
+range_component = NodePath("../../RangeComponent")
+rotate_weight = 5.0
+
+[connection signal="timeout" from="Duration" to="." method="end"]

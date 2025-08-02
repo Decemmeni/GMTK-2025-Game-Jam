@@ -1,0 +1,84 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyk72tb2fgma4"]
+
+[ext_resource type="Script" uid="uid://ubhnxk2k4540" path="res://Scenes/Enemies/Cannon/cannon.gd" id="1_y3m02"]
+[ext_resource type="PackedScene" uid="uid://5neyynio6y20" path="res://Components/Range/range_component.tscn" id="2_we7l0"]
+[ext_resource type="PackedScene" uid="uid://dg82yaggdces8" path="res://Components/LookAt/look_at_component.tscn" id="3_2tmfo"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2tmfo"]
+radius = 144.222
+
+[node name="Cannon" type="Node2D"]
+script = ExtResource("1_y3m02")
+
+[node name="Pivot" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(0.66309, 0.66309)
+
+[node name="Barrel" type="ColorRect" parent="Pivot"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -35.0
+offset_right = 30.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.27272, 0.490338)
+color = Color(0.619608, 1, 1, 1)
+
+[node name="Base" type="ColorRect" parent="Pivot"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = -44.0
+offset_right = 3.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.02987, 1.02987)
+color = Color(0, 0.803446, 0.809285, 1)
+
+[node name="BarrelEnd" type="ColorRect" parent="Pivot"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 44.0
+offset_top = -44.0
+offset_right = 50.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.27272, 0.490338)
+color = Color(0, 0.447704, 0.450493, 1)
+
+[node name="BarrelEndShot" type="Marker2D" parent="Pivot/BarrelEnd"]
+position = Vector2(6.28573, 48.9458)
+
+[node name="RangeComponent" parent="." instance=ExtResource("2_we7l0")]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RangeComponent"]
+shape = SubResource("CircleShape2D_2tmfo")
+
+[node name="LookAtComponent" parent="." node_paths=PackedStringArray("range_component") instance=ExtResource("3_2tmfo")]
+range_component = NodePath("../RangeComponent")
+
+[node name="ShootDelay" type="Timer" parent="."]
+wait_time = 2.5
+autostart = true
+
+[connection signal="timeout" from="ShootDelay" to="." method="shoot"]

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://5neyynio6y20"]
+
+[ext_resource type="Script" uid="uid://m2ay2cgirpx0" path="res://Components/Range/range_component.gd" id="1_sq2xa"]
+
+[node name="RangeComponent" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_sq2xa")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c0bqqawn0whhp"]
+
+[ext_resource type="Script" uid="uid://di7s275b3ktm5" path="res://Scenes/GameMechanic/PowerUps/SpeedBooster/speed_booster_powerup.gd" id="1_e81mi"]
+[ext_resource type="PackedScene" uid="uid://b4g6c6d8fqd2c" path="res://Components/PowerUp/power_up_component.tscn" id="1_efw03"]
+
+[node name="SpeedBoosterPowerup" type="Node2D"]
+script = ExtResource("1_e81mi")
+
+[node name="PowerUpComponent" parent="." instance=ExtResource("1_efw03")]
+
+[node name="Duration" type="Timer" parent="."]
+wait_time = 30.0
+autostart = true
+
+[connection signal="timeout" from="Duration" to="." method="end"]
