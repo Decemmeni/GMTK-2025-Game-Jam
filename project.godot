@@ -26,8 +26,8 @@ gdscript/warnings/untyped_declaration=2
 
 [display]
 
-window/size/viewport_width=220
-window/size/viewport_height=220
+window/size/viewport_width=250
+window/size/viewport_height=250
 window/size/window_width_override=1920
 window/size/window_height_override=1080
 window/stretch/mode="viewport"
@@ -37,6 +37,7 @@ window/stretch/mode="viewport"
 folder_colors={
 "res://Classes/": "teal",
 "res://Components/": "blue",
+"res://Fonts/": "gray",
 "res://Globals/": "green",
 "res://Music/": "pink",
 "res://Resources/": "purple",

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://clcwvobqqgbgo"]
+[gd_scene load_steps=9 format=3 uid="uid://clcwvobqqgbgo"]
 
 [ext_resource type="Script" uid="uid://c4kkfminulbk" path="res://Scenes/Player/player.gd" id="1_uvnfx"]
 [ext_resource type="PackedScene" uid="uid://bf68et1ivv1g1" path="res://Components/Health/health_component.tscn" id="2_a3d8c"]
@@ -6,7 +6,6 @@
 [ext_resource type="AudioStream" uid="uid://c8b2dbwr5dfv8" path="res://SFX/Slide.wav" id="4_mtuoh"]
 [ext_resource type="AudioStream" uid="uid://brs4ujxien7q" path="res://SFX/Transition.wav" id="5_htcer"]
 [ext_resource type="PackedScene" uid="uid://dwt01ijkpc6y1" path="res://Components/FollowCollectable/follow_collectable_component.tscn" id="6_dd0ac"]
-[ext_resource type="PackedScene" uid="uid://cb2y4ij610ok2" path="res://Scenes/GameMechanic/PowerUps/Cannon/cannon_powerup.tscn" id="7_0u5uq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uvnfx"]
 radius = 5.0
@@ -62,8 +61,6 @@ stream = ExtResource("5_htcer")
 volume_db = 5.0
 
 [node name="FollowCollectableComponent" parent="." instance=ExtResource("6_dd0ac")]
-
-[node name="CannonPowerup" parent="." instance=ExtResource("7_0u5uq")]
 
 [connection signal="switched_bubble" from="." to="." method="switch_camera"]
 [connection signal="area_entered" from="BubbleDetector" to="." method="_on_bubble_detector_area_entered"]

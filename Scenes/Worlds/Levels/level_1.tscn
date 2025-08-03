@@ -1,0 +1,210 @@
+[gd_scene load_steps=10 format=3 uid="uid://b40wf4k2javeo"]
+
+[ext_resource type="Texture2D" uid="uid://dq52n7bce4btn" path="res://Sprites/Background/level1.png" id="1_usyty"]
+[ext_resource type="PackedScene" uid="uid://dyoi8ykgssvy1" path="res://Scenes/GameMechanic/Bubble/bubble.tscn" id="2_241hd"]
+[ext_resource type="PackedScene" uid="uid://clcwvobqqgbgo" path="res://Scenes/Player/player.tscn" id="3_a0ent"]
+[ext_resource type="FontFile" uid="uid://m82jt6ing615" path="res://Fonts/PixelatedEleganceRegular-ovyAA.ttf" id="3_p83wx"]
+[ext_resource type="AudioStream" uid="uid://c6x7is7xt8ms6" path="res://Music/gamejamloop1.mp3" id="4_a0ent"]
+[ext_resource type="PackedScene" uid="uid://cfuwfp4nnwxuo" path="res://Scenes/GameMechanic/Bubble/bubblemedium.tscn" id="6_42dlj"]
+[ext_resource type="PackedScene" uid="uid://bykgi5iv51jij" path="res://Scenes/Enemies/Bat/bat_enemy.tscn" id="6_c80u3"]
+[ext_resource type="PackedScene" uid="uid://c41g5thjy5tue" path="res://Scenes/GameMechanic/Bubble/bubblebig.tscn" id="7_c80u3"]
+[ext_resource type="PackedScene" uid="uid://cv65bitj5nmw0" path="res://Scenes/Enemies/Spinner/spinner_enemy.tscn" id="8_53kds"]
+
+[node name="Level1" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_usyty")
+metadata/_edit_lock_ = true
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_a0ent")
+autoplay = true
+parameters/looping = true
+
+[node name="Title" type="Label" parent="."]
+texture_filter = 1
+offset_left = 79.0
+offset_top = 75.0
+offset_right = 186.0
+offset_bottom = 98.0
+theme_override_fonts/font = ExtResource("3_p83wx")
+text = "Seclud@ad"
+
+[node name="BubblesFolder" type="Node2D" parent="."]
+
+[node name="Bubble" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(126, 122)
+
+[node name="Bubble2" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(264, 40)
+
+[node name="BatEnemy" parent="BubblesFolder/Bubble2" instance=ExtResource("6_c80u3")]
+
+[node name="Bubble3" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(392, -88)
+
+[node name="BatEnemy" parent="BubblesFolder/Bubble3" instance=ExtResource("6_c80u3")]
+position = Vector2(-48, -32)
+
+[node name="BatEnemy2" parent="BubblesFolder/Bubble3" instance=ExtResource("6_c80u3")]
+position = Vector2(48, 32)
+
+[node name="Bubble4" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(392, 152)
+
+[node name="Bubble5" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(408, 312)
+
+[node name="Bubble6" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(296, 456)
+
+[node name="Bubble7" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(520, 456)
+
+[node name="Bubble8" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(408, 584)
+
+[node name="Bubble9" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(616, 328)
+
+[node name="Bubble10" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(648, 152)
+
+[node name="Bubble11" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(536, 8)
+
+[node name="Bubble12" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(536, -232)
+
+[node name="Bubble13" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(712, -200)
+
+[node name="Bubble14" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(776, -24)
+
+[node name="Bubble15" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(856, 168)
+
+[node name="SpinnerEnemy" parent="BubblesFolder/Bubble15" instance=ExtResource("8_53kds")]
+
+[node name="Bubble16" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(872, 360)
+
+[node name="Bubble17" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(888, 520)
+
+[node name="Bubble18" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(1048, 88)
+
+[node name="Bubble19" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(1160, 216)
+
+[node name="Bubble20" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(1176, 392)
+
+[node name="Bubble21" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(1112, -72)
+
+[node name="Bubble22" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(1048, -216)
+
+[node name="Bubble23" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(1176, -216)
+
+[node name="Bubble24" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(1016, -360)
+
+[node name="Bubble25" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(1288, 120)
+
+[node name="Bubble26" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(1400, 72)
+
+[node name="Bubble27" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(1432, 216)
+
+[node name="Bubble28" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(1544, 40)
+
+[node name="Bubble29" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(1528, 328)
+
+[node name="Bubble30" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(1624, 392)
+
+[node name="Bubble31" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(1768, 456)
+
+[node name="Bubble32" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(1896, 344)
+
+[node name="Bubble33" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(1928, 216)
+
+[node name="Bubble34" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(1736, -24)
+
+[node name="Bubble35" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(1896, 72)
+
+[node name="Bubble36" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(1880, -136)
+
+[node name="Bubble37" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(2056, -40)
+
+[node name="Bubble38" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(1784, -296)
+
+[node name="Bubble39" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(1880, -424)
+
+[node name="Bubble40" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(1976, -536)
+
+[node name="Bubble41" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(1816, -600)
+
+[node name="Bubble42" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(2136, -536)
+
+[node name="Bubble43" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(1960, -728)
+
+[node name="Bubble44" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(2056, -856)
+
+[node name="Bubble45" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(2232, -40)
+
+[node name="Bubble46" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(2440, -40)
+
+[node name="SpinnerEnemy" parent="BubblesFolder/Bubble46" instance=ExtResource("8_53kds")]
+
+[node name="Bubble47" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(2632, -40)
+
+[node name="Bubble48" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(2840, -40)
+
+[node name="Bubble49" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(2856, 136)
+
+[node name="Bubble50" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
+position = Vector2(2888, -232)
+
+[node name="Bubble51" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(2792, -360)
+
+[node name="Bubble52" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(2648, -408)
+
+[node name="Bubble53" parent="BubblesFolder" instance=ExtResource("2_241hd")]
+position = Vector2(3032, -40)
+
+[node name="Bubble54" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
+position = Vector2(3224, -40)
+
+[node name="Player" parent="." node_paths=PackedStringArray("current_bubble") instance=ExtResource("3_a0ent")]
+current_bubble = NodePath("../BubblesFolder/Bubble")

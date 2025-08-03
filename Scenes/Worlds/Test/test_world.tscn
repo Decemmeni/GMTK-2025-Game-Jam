@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dnlg6i7ynoct5"]
+[gd_scene load_steps=51 format=3 uid="uid://dnlg6i7ynoct5"]
 
 [ext_resource type="PackedScene" uid="uid://dyoi8ykgssvy1" path="res://Scenes/GameMechanic/Bubble/bubble.tscn" id="1_4sdeg"]
 [ext_resource type="PackedScene" uid="uid://cv65bitj5nmw0" path="res://Scenes/Enemies/Spinner/spinner_enemy.tscn" id="2_0767h"]
@@ -7,24 +7,1177 @@
 [ext_resource type="AudioStream" uid="uid://c6x7is7xt8ms6" path="res://Music/gamejamloop1.mp3" id="4_5l3ce"]
 [ext_resource type="PackedScene" uid="uid://cd3u88j4sqel2" path="res://Scenes/GameMechanic/Key/key.tscn" id="4_g13k6"]
 [ext_resource type="PackedScene" uid="uid://cyk72tb2fgma4" path="res://Scenes/Enemies/Cannon/Cannon.tscn" id="5_wm4eu"]
+[ext_resource type="PackedScene" uid="uid://bykgi5iv51jij" path="res://Scenes/Enemies/Bat/bat_enemy.tscn" id="8_2is4e"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0767h"]
 radius = 80.0
 
+[sub_resource type="Shader" id="Shader_2is4e"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fpw45"]
+resource_local_to_scene = true
+shader = SubResource("Shader_2is4e")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_e66j0"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p4un6"]
+resource_local_to_scene = true
+shader = SubResource("Shader_e66j0")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_ckpb8"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vlfe2"]
+resource_local_to_scene = true
+shader = SubResource("Shader_ckpb8")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_ab1mt"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h47ph"]
+resource_local_to_scene = true
+shader = SubResource("Shader_ab1mt")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_ogl1w"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7mgbr"]
+resource_local_to_scene = true
+shader = SubResource("Shader_ogl1w")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_be1me"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vka8s"]
+resource_local_to_scene = true
+shader = SubResource("Shader_be1me")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_h5o25"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7uj1s"]
+resource_local_to_scene = true
+shader = SubResource("Shader_h5o25")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_5l3ce"]
 radius = 55.0
+
+[sub_resource type="Shader" id="Shader_g7pfv"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l28vu"]
+resource_local_to_scene = true
+shader = SubResource("Shader_g7pfv")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_hhy0u"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jw12i"]
+resource_local_to_scene = true
+shader = SubResource("Shader_hhy0u")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_bpner"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uyi41"]
+resource_local_to_scene = true
+shader = SubResource("Shader_bpner")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_6n6or"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xxbp2"]
+resource_local_to_scene = true
+shader = SubResource("Shader_6n6or")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_nyo2u"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hcumw"]
+resource_local_to_scene = true
+shader = SubResource("Shader_nyo2u")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wm4eu"]
 radius = 120.0
 
+[sub_resource type="Shader" id="Shader_4jwi2"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vgw1w"]
+resource_local_to_scene = true
+shader = SubResource("Shader_4jwi2")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_3shrd"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7migq"]
+resource_local_to_scene = true
+shader = SubResource("Shader_3shrd")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_5wvkv"]
 radius = 55.0
+
+[sub_resource type="Shader" id="Shader_jfs8q"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1irjn"]
+resource_local_to_scene = true
+shader = SubResource("Shader_jfs8q")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
+[sub_resource type="Shader" id="Shader_hbxu4"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yaypy"]
+resource_local_to_scene = true
+shader = SubResource("Shader_hbxu4")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g13k6"]
 radius = 140.0
 
+[sub_resource type="Shader" id="Shader_8l7ol"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e80km"]
+resource_local_to_scene = true
+shader = SubResource("Shader_8l7ol")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_fjvhe"]
 radius = 60.0
+
+[sub_resource type="Shader" id="Shader_2iga1"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+// ── Parameters ──────────────────────────────────────────────
+// Circle centre in UV space (0→1)
+uniform vec2 center         = vec2(0.5, 0.5);
+
+// Start/end angles (degrees), now from –360° to +360°
+uniform float start_deg     : hint_range(-360.0, 360.0) = 0.0;
+uniform float end_deg       : hint_range(-360.0, 360.0) = 90.0;
+
+// Choose direction: false = CCW, true = CW
+uniform bool  clockwise     = false;  // Godot supports `uniform bool` :contentReference[oaicite:0]{index=0}
+
+// Tint colours
+uniform vec4 inside_col     : source_color = vec4(1.0,1.0,1.0,1.0);
+uniform vec4 outside_col    : source_color = vec4(0.0,0.0,0.0,1.0);
+
+void fragment() {
+    // 1️⃣ sample the sprite
+    vec4 texc = texture(TEXTURE, UV);
+
+    // 2️⃣ compute angle [0..2π)
+    vec2 ofs = UV - center;
+    float ang = atan(ofs.y, ofs.x);
+    if (ang < 0.0) ang += TAU;
+
+    // 3️⃣ convert deg→rad
+    float s = radians(start_deg);
+    float e = radians(end_deg);
+
+    // 4️⃣ compute wedge sizes (always ≥0, <TAU)
+    float d_ccw = mod(e - s + TAU, TAU);  // CCW span :contentReference[oaicite:1]{index=1}
+    float d_cw  = mod(s - e + TAU, TAU);  // CW span
+
+    // 5️⃣ test membership based on direction
+    bool in_wedge;
+    if (!clockwise) {
+        // CCW: is (ang) within [s → s + d_ccw]?
+        float diff = mod(ang - s + TAU, TAU);
+        in_wedge = diff <= d_ccw;
+    } else {
+        // CW: is (ang) within [s → s - d_cw] going clockwise?
+        float diff = mod(s - ang + TAU, TAU);
+        in_wedge = diff <= d_cw;
+    }
+
+    // 6️⃣ apply tint
+    vec4 tint = in_wedge ? inside_col : outside_col;
+    COLOR = texc * tint;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_x0sag"]
+resource_local_to_scene = true
+shader = SubResource("Shader_2iga1")
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/start_deg = 129.44
+shader_parameter/end_deg = 129.44
+shader_parameter/clockwise = false
+shader_parameter/inside_col = Color(1, 1, 1, 1)
+shader_parameter/outside_col = Color(0, 0, 0, 0)
 
 [node name="TestWorld" type="Node2D"]
 
@@ -46,12 +1199,8 @@ position = Vector2(216, 206)
 [node name="Bubble4" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(404, 82)
 
-[node name="Key" parent="Bubble4" instance=ExtResource("4_g13k6")]
-
 [node name="Bubble5" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(424, 228)
-
-[node name="Key" parent="Bubble5" instance=ExtResource("4_g13k6")]
 
 [node name="Bubble7" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(508, -14)
@@ -65,11 +1214,17 @@ position = Vector2(654, 1)
 [node name="CollisionShape2D" parent="Bubble9/Area2D" index="0"]
 shape = SubResource("CircleShape2D_0767h")
 
+[node name="ReplaceInk" parent="Bubble9" index="3"]
+material = SubResource("ShaderMaterial_fpw45")
+
 [node name="Bubble11" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(783, -32)
 
 [node name="CollisionShape2D" parent="Bubble11/Area2D" index="0"]
 shape = SubResource("CircleShape2D_0767h")
+
+[node name="ReplaceInk" parent="Bubble11" index="3"]
+material = SubResource("ShaderMaterial_p4un6")
 
 [node name="Bubble12" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(913, -88)
@@ -77,11 +1232,17 @@ position = Vector2(913, -88)
 [node name="CollisionShape2D" parent="Bubble12/Area2D" index="0"]
 shape = SubResource("CircleShape2D_0767h")
 
+[node name="ReplaceInk" parent="Bubble12" index="3"]
+material = SubResource("ShaderMaterial_vlfe2")
+
 [node name="Bubble16" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(918, 215)
 
 [node name="CollisionShape2D" parent="Bubble16/Area2D" index="0"]
 shape = SubResource("CircleShape2D_0767h")
+
+[node name="ReplaceInk" parent="Bubble16" index="3"]
+material = SubResource("ShaderMaterial_h47ph")
 
 [node name="Bubble17" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1049, 283)
@@ -89,11 +1250,17 @@ position = Vector2(1049, 283)
 [node name="CollisionShape2D" parent="Bubble17/Area2D" index="0"]
 shape = SubResource("CircleShape2D_0767h")
 
+[node name="ReplaceInk" parent="Bubble17" index="3"]
+material = SubResource("ShaderMaterial_7mgbr")
+
 [node name="Bubble18" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1257, 254)
 
 [node name="CollisionShape2D" parent="Bubble18/Area2D" index="0"]
 shape = SubResource("CircleShape2D_0767h")
+
+[node name="ReplaceInk" parent="Bubble18" index="3"]
+material = SubResource("ShaderMaterial_vka8s")
 
 [node name="Bubble19" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1432, 344)
@@ -101,11 +1268,17 @@ position = Vector2(1432, 344)
 [node name="CollisionShape2D" parent="Bubble19/Area2D" index="0"]
 shape = SubResource("CircleShape2D_0767h")
 
+[node name="ReplaceInk" parent="Bubble19" index="3"]
+material = SubResource("ShaderMaterial_7uj1s")
+
 [node name="Bubble20" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1378, 242)
 
 [node name="CollisionShape2D" parent="Bubble20/Area2D" index="0"]
 shape = SubResource("CircleShape2D_5l3ce")
+
+[node name="ReplaceInk" parent="Bubble20" index="3"]
+material = SubResource("ShaderMaterial_l28vu")
 
 [node name="Bubble21" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1330, 359)
@@ -113,11 +1286,17 @@ position = Vector2(1330, 359)
 [node name="CollisionShape2D" parent="Bubble21/Area2D" index="0"]
 shape = SubResource("CircleShape2D_5l3ce")
 
+[node name="ReplaceInk" parent="Bubble21" index="3"]
+material = SubResource("ShaderMaterial_jw12i")
+
 [node name="Bubble22" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1154, 243)
 
 [node name="CollisionShape2D" parent="Bubble22/Area2D" index="0"]
 shape = SubResource("CircleShape2D_5l3ce")
+
+[node name="ReplaceInk" parent="Bubble22" index="3"]
+material = SubResource("ShaderMaterial_uyi41")
 
 [node name="Bubble23" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1166, 143)
@@ -125,11 +1304,17 @@ position = Vector2(1166, 143)
 [node name="CollisionShape2D" parent="Bubble23/Area2D" index="0"]
 shape = SubResource("CircleShape2D_5l3ce")
 
+[node name="ReplaceInk" parent="Bubble23" index="3"]
+material = SubResource("ShaderMaterial_xxbp2")
+
 [node name="Bubble24" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1233, 78)
 
 [node name="CollisionShape2D" parent="Bubble24/Area2D" index="0"]
 shape = SubResource("CircleShape2D_5l3ce")
+
+[node name="ReplaceInk" parent="Bubble24" index="3"]
+material = SubResource("ShaderMaterial_hcumw")
 
 [node name="Bubble25" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1317, 22)
@@ -138,11 +1323,17 @@ position = Vector2(1317, 22)
 position = Vector2(47, -20)
 shape = SubResource("CircleShape2D_wm4eu")
 
+[node name="ReplaceInk" parent="Bubble25" index="3"]
+material = SubResource("ShaderMaterial_vgw1w")
+
 [node name="Bubble13" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1110, -118)
 
 [node name="CollisionShape2D" parent="Bubble13/Area2D" index="0"]
 shape = SubResource("CircleShape2D_0767h")
+
+[node name="ReplaceInk" parent="Bubble13" index="3"]
+material = SubResource("ShaderMaterial_7migq")
 
 [node name="Bubble14" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1027, -25)
@@ -150,11 +1341,17 @@ position = Vector2(1027, -25)
 [node name="CollisionShape2D" parent="Bubble14/Area2D" index="0"]
 shape = SubResource("CircleShape2D_5wvkv")
 
+[node name="ReplaceInk" parent="Bubble14" index="3"]
+material = SubResource("ShaderMaterial_1irjn")
+
 [node name="Bubble15" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(1054, 72)
 
 [node name="CollisionShape2D" parent="Bubble15/Area2D" index="0"]
 shape = SubResource("CircleShape2D_5wvkv")
+
+[node name="ReplaceInk" parent="Bubble15" index="3"]
+material = SubResource("ShaderMaterial_yaypy")
 
 [node name="Bubble10" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(731, 144)
@@ -162,11 +1359,17 @@ position = Vector2(731, 144)
 [node name="CollisionShape2D" parent="Bubble10/Area2D" index="0"]
 shape = SubResource("CircleShape2D_g13k6")
 
+[node name="ReplaceInk" parent="Bubble10" index="3"]
+material = SubResource("ShaderMaterial_e80km")
+
 [node name="Bubble6" parent="." instance=ExtResource("1_4sdeg")]
 position = Vector2(517, 315)
 
 [node name="CollisionShape2D" parent="Bubble6/Area2D" index="0"]
 shape = SubResource("CircleShape2D_fjvhe")
+
+[node name="ReplaceInk" parent="Bubble6" index="3"]
+material = SubResource("ShaderMaterial_x0sag")
 
 [node name="Label" type="Label" parent="."]
 offset_left = 88.0
@@ -186,6 +1389,9 @@ parameters/looping = true
 
 [node name="Cannon" parent="." instance=ExtResource("5_wm4eu")]
 position = Vector2(399, -67)
+
+[node name="BatEnemy" parent="." instance=ExtResource("8_2is4e")]
+position = Vector2(-3, 62)
 
 [editable path="Bubble9"]
 [editable path="Bubble11"]

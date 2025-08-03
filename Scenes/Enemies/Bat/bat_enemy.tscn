@@ -1,0 +1,143 @@
+[gd_scene load_steps=9 format=3 uid="uid://bykgi5iv51jij"]
+
+[ext_resource type="Script" uid="uid://dtspeaaqb8x36" path="res://Scenes/Enemies/Bat/bat_enemy.gd" id="1_onq7r"]
+[ext_resource type="Script" uid="uid://dxi6uy30u7bic" path="res://Components/Hitbox/hitbox_component.gd" id="2_sdt52"]
+[ext_resource type="Script" uid="uid://bhyqxqevfvrnh" path="res://Components/Hurtbox/hurtbox_component.gd" id="3_ir587"]
+[ext_resource type="Script" uid="uid://bhfuxoi0dasic" path="res://Components/Health/health_component.gd" id="4_135m0"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_d68yv"]
+radius = 20.0998
+
+[sub_resource type="Animation" id="Animation_ir587"]
+resource_name = "die"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [0.0, 6.28319]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
+}
+
+[sub_resource type="Animation" id="Animation_135m0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [6.28319]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_135m0"]
+_data = {
+&"RESET": SubResource("Animation_135m0"),
+&"die": SubResource("Animation_ir587")
+}
+
+[node name="BatEnemy" type="CharacterBody2D"]
+rotation = 6.28319
+collision_layer = 64
+collision_mask = 0
+script = ExtResource("1_onq7r")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_sdt52")
+damage = 5.0
+metadata/_custom_type_script = "uid://dxi6uy30u7bic"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("CircleShape2D_d68yv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_d68yv")
+debug_color = Color(0.845641, 0.361522, 0.298002, 0.42)
+
+[node name="HurtboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("health_component")]
+collision_layer = 64
+collision_mask = 0
+script = ExtResource("3_ir587")
+health_component = NodePath("../HealthComponent")
+metadata/_custom_type_script = "uid://bhyqxqevfvrnh"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+shape = SubResource("CircleShape2D_d68yv")
+debug_color = Color(0.845641, 0.361522, 0.298002, 0.42)
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("4_135m0")
+metadata/_custom_type_script = "uid://bhfuxoi0dasic"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_135m0")
+}
+
+[node name="WanderChange" type="Timer" parent="."]
+wait_time = 4.0
+autostart = true
+
+[connection signal="timeout" from="WanderChange" to="." method="change_wander_point"]

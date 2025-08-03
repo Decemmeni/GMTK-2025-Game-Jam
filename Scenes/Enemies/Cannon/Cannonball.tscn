@@ -17,7 +17,10 @@ debug_color = Color(0.411851, 0.014551, 0.0167881, 0.42)
 
 [node name="HitboxComponent" parent="." instance=ExtResource("2_vnp3y")]
 collision_mask = 2
+damage = 5.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
 shape = SubResource("CircleShape2D_oxa74")
 debug_color = Color(0.411851, 0.014551, 0.0167881, 0.42)
+
+[connection signal="hurt_something" from="HitboxComponent" to="ProjectileComponent" method="projectile_delete"]

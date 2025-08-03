@@ -37,7 +37,7 @@ func _physics_process(_delta: float) -> void:
 	
 
 func move(d : float) -> void:
-	if not current_bubble: 
+	if not current_bubble:
 		push_warning("Bubble not selected")
 		return
 	
@@ -46,8 +46,13 @@ func move(d : float) -> void:
 	global_position =  origin + inner_layer
 	
 	current_radian += current_rotation_speed
+	#current_radian = wrapf(current_radian, -2*PI, 2*PI)
 	current_bubble.current_completion += current_rotation_speed
-	current_bubble.line.add_point(current_bubble.to_local(global_position))
+	#print(deg_to_rad(current_bubble.max_right) > current_radian)
+	if current_rotation_speed > 0 and deg_to_rad(current_bubble.max_left) < current_radian: # Clockwise
+		current_bubble.max_left += rad_to_deg(current_rotation_speed)
+	elif current_rotation_speed < 0 and deg_to_rad(current_bubble.max_right) > current_radian: # Counter Clockwise
+		current_bubble.max_right += rad_to_deg(current_rotation_speed)
 	
 	var dir : float = Input.get_action_raw_strength("left") - Input.get_action_raw_strength("right")
 	if not dir: 
@@ -61,6 +66,8 @@ func move(d : float) -> void:
 	
 
 func switch_bubble() -> void:
+	if not current_bubble: return
+	
 	current_bubble.area_2d.set_collision_layer_value(3, false)
 	current_bubble.area_2d.set_collision_layer_value(4, true)
 	
@@ -70,6 +77,10 @@ func switch_bubble() -> void:
 	current_bubble.area_2d.set_collision_layer_value(4, false)
 	current_bubble = next_bubble
 	current_radian += PI
+	current_radian = wrapf(current_radian, -2*PI, 2*PI)
+	current_bubble.start_pos = rad_to_deg(current_radian)
+	current_bubble.max_left = rad_to_deg(current_radian)
+	current_bubble.max_right = rad_to_deg(current_radian)
 	bubble_transition_player.play()
 	switched_bubble.emit()
 	
@@ -84,6 +95,8 @@ func _on_bubble_detector_area_exited(_area: Area2D) -> void:
 	next_bubble = null
 
 func switch_camera() -> void:
+	if not current_bubble: return
+	
 	camera_2d.global_position = current_bubble.global_position
 
 func play_slide(_d : float) -> void:

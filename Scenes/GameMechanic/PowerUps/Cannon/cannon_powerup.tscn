@@ -58,4 +58,9 @@ color = Color(0.561937, 0.26584, 0.448063, 1)
 range_component = NodePath("../../RangeComponent")
 rotate_weight = 5.0
 
+[node name="Shoot" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
 [connection signal="timeout" from="Duration" to="." method="end"]
+[connection signal="timeout" from="Shoot" to="." method="shootball"]
