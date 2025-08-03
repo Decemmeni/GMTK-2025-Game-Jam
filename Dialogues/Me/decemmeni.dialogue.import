@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://dx3efymifllmf"
+path="res://.godot/imported/decemmeni.dialogue-d6fdbaadb44e45d2372ec2e46c86c462.tres"
+
+[deps]
+
+source_file="res://Dialogues/Me/decemmeni.dialogue"
+dest_files=["res://.godot/imported/decemmeni.dialogue-d6fdbaadb44e45d2372ec2e46c86c462.tres"]
+
+[params]
+
+defaults=true

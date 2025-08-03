@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://choan28oittrl"]
+
+[ext_resource type="Script" uid="uid://guvoqamrl5xx" path="res://Scenes/NPCBase/npc.gd" id="1_y2etc"]
+[ext_resource type="Resource" uid="uid://c60smx616bue3" path="res://Resources/NPC/Test/testnpc.tres" id="2_5i6ku"]
+[ext_resource type="PackedScene" uid="uid://5neyynio6y20" path="res://Components/Range/range_component.tscn" id="2_73d43"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5i6ku"]
+radius = 24.0
+
+[node name="NPC" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_y2etc")
+npc_resource = ExtResource("2_5i6ku")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="RangeComponent" parent="." instance=ExtResource("2_73d43")]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RangeComponent"]
+shape = SubResource("CircleShape2D_5i6ku")

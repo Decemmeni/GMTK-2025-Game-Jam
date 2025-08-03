@@ -1,27 +1,36 @@
-[gd_scene load_steps=14 format=3 uid="uid://b40wf4k2javeo"]
+[gd_scene load_steps=22 format=3 uid="uid://b40wf4k2javeo"]
 
+[ext_resource type="Script" uid="uid://k1qx7fqcdaw0" path="res://Scenes/Worlds/Levels/level_1.gd" id="1_ays86"]
 [ext_resource type="Texture2D" uid="uid://dq52n7bce4btn" path="res://Sprites/Background/level1.png" id="1_usyty"]
 [ext_resource type="PackedScene" uid="uid://dyoi8ykgssvy1" path="res://Scenes/GameMechanic/Bubble/bubble.tscn" id="2_241hd"]
+[ext_resource type="AudioStream" uid="uid://dbsnvutr4ek7l" path="res://Music/mainmusic.mp3" id="2_nnpsi"]
 [ext_resource type="PackedScene" uid="uid://clcwvobqqgbgo" path="res://Scenes/Player/player.tscn" id="3_a0ent"]
 [ext_resource type="FontFile" uid="uid://m82jt6ing615" path="res://Fonts/PixelatedEleganceRegular-ovyAA.ttf" id="3_p83wx"]
-[ext_resource type="AudioStream" uid="uid://c6x7is7xt8ms6" path="res://Music/gamejamloop1.mp3" id="4_a0ent"]
 [ext_resource type="PackedScene" uid="uid://cyk72tb2fgma4" path="res://Scenes/Enemies/Cannon/Cannon.tscn" id="5_8wjtf"]
 [ext_resource type="PackedScene" uid="uid://cujes46t0o8rb" path="res://Scenes/Enemies/QuadShooter/quad_shooter_enemy.tscn" id="5_i4hgb"]
+[ext_resource type="PackedScene" uid="uid://choan28oittrl" path="res://Scenes/NPCBase/npc.tscn" id="5_j4uhl"]
 [ext_resource type="PackedScene" uid="uid://cfuwfp4nnwxuo" path="res://Scenes/GameMechanic/Bubble/bubblemedium.tscn" id="6_42dlj"]
 [ext_resource type="PackedScene" uid="uid://bykgi5iv51jij" path="res://Scenes/Enemies/Bat/bat_enemy.tscn" id="6_c80u3"]
+[ext_resource type="Resource" uid="uid://cbwenihqi588s" path="res://Resources/NPC/Me/decemmeni.tres" id="6_ddewx"]
 [ext_resource type="PackedScene" uid="uid://f6sx27qsiwng" path="res://Scenes/Enemies/Cannon/StaticCannon.tscn" id="6_drcnb"]
+[ext_resource type="Resource" uid="uid://dh060m3ot2bsq" path="res://Resources/NPC/Latadenata/latadenata.tres" id="6_nnpsi"]
+[ext_resource type="Resource" uid="uid://5pvgj8womllf" path="res://Resources/NPC/Tinea/tinea.tres" id="7_568ix"]
 [ext_resource type="PackedScene" uid="uid://c41g5thjy5tue" path="res://Scenes/GameMechanic/Bubble/bubblebig.tscn" id="7_c80u3"]
+[ext_resource type="Resource" uid="uid://cpu8iui48tr66" path="res://Resources/NPC/Circlemaster/circlemaster.tres" id="7_q5k5d"]
+[ext_resource type="Resource" uid="uid://b7wrkebtyvboo" path="res://Resources/NPC/PumpkinMelone/pumpmelone.tres" id="7_rd541"]
+[ext_resource type="Resource" uid="uid://c1qjuu6rfuq2m" path="res://Resources/NPC/Clint/clint.tres" id="7_sm7b6"]
 [ext_resource type="PackedScene" uid="uid://dmfqtx2li02ed" path="res://Scenes/Enemies/Charger/charger_enemy.tscn" id="8_1o54g"]
 [ext_resource type="PackedScene" uid="uid://cv65bitj5nmw0" path="res://Scenes/Enemies/Spinner/spinner_enemy.tscn" id="8_53kds"]
 
 [node name="Level1" type="Node2D"]
+script = ExtResource("1_ays86")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1896, -88)
 texture = ExtResource("1_usyty")
-metadata/_edit_lock_ = true
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("4_a0ent")
+stream = ExtResource("2_nnpsi")
 autoplay = true
 parameters/looping = true
 
@@ -143,6 +152,11 @@ position = Vector2(888, 520)
 
 [node name="BatEnemy" parent="BubblesFolder/Bubble17" instance=ExtResource("6_c80u3")]
 
+[node name="Latadenata" parent="BubblesFolder/Bubble17" instance=ExtResource("5_j4uhl")]
+position = Vector2(56, 0)
+npc_resource = ExtResource("6_nnpsi")
+sprite_size = Vector2(2, 2)
+
 [node name="Bubble18" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
 position = Vector2(1048, 88)
 
@@ -187,6 +201,10 @@ position = Vector2(1176, -216)
 [node name="Bubble24" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
 position = Vector2(1016, -360)
 
+[node name="Me" parent="BubblesFolder/Bubble24" instance=ExtResource("5_j4uhl")]
+position = Vector2(0, -72)
+npc_resource = ExtResource("6_ddewx")
+
 [node name="Bubble25" parent="BubblesFolder" instance=ExtResource("2_241hd")]
 position = Vector2(1288, 120)
 
@@ -227,6 +245,10 @@ position = Vector2(-64, 16)
 
 [node name="BatEnemy2" parent="BubblesFolder/Bubble31" instance=ExtResource("6_c80u3")]
 position = Vector2(72, -16)
+
+[node name="PumpMelone" parent="BubblesFolder/Bubble31" instance=ExtResource("5_j4uhl")]
+position = Vector2(0, -80)
+npc_resource = ExtResource("7_rd541")
 
 [node name="Bubble32" parent="BubblesFolder" instance=ExtResource("2_241hd")]
 position = Vector2(1896, 344)
@@ -308,6 +330,10 @@ position = Vector2(56, 16)
 [node name="Bubble44" parent="BubblesFolder" instance=ExtResource("2_241hd")]
 position = Vector2(2056, -856)
 
+[node name="Tinea" parent="BubblesFolder/Bubble44" instance=ExtResource("5_j4uhl")]
+position = Vector2(8, -56)
+npc_resource = ExtResource("7_568ix")
+
 [node name="Bubble45" parent="BubblesFolder" instance=ExtResource("6_42dlj")]
 position = Vector2(2232, -40)
 
@@ -367,11 +393,19 @@ position = Vector2(2792, -360)
 [node name="Bubble52" parent="BubblesFolder" instance=ExtResource("2_241hd")]
 position = Vector2(2648, -408)
 
+[node name="Clint" parent="BubblesFolder/Bubble52" instance=ExtResource("5_j4uhl")]
+position = Vector2(-32, -40)
+npc_resource = ExtResource("7_sm7b6")
+
 [node name="Bubble53" parent="BubblesFolder" instance=ExtResource("2_241hd")]
 position = Vector2(3032, -40)
 
 [node name="Bubble54" parent="BubblesFolder" instance=ExtResource("7_c80u3")]
 position = Vector2(3224, -40)
+
+[node name="Circlemaster" parent="BubblesFolder/Bubble54" instance=ExtResource("5_j4uhl")]
+position = Vector2(96, 0)
+npc_resource = ExtResource("7_q5k5d")
 
 [node name="Player" parent="." node_paths=PackedStringArray("current_bubble") instance=ExtResource("3_a0ent")]
 current_bubble = NodePath("../BubblesFolder/Bubble")

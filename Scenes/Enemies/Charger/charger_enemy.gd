@@ -23,6 +23,13 @@ func _physics_process(_delta: float) -> void:
 
 func spinny_spin() -> void:
 	if not bubble or not bubble.collision_shape_2d: return
+	if not LevelManager.player or not LevelManager.player.current_bubble == bubble: 
+		var r : float = bubble.collision_shape_2d.shape.radius
+		global_position = bubble.global_position + Vector2(cos(current_radian + starting_radian), sin(current_radian + starting_radian)) * r
+		global_rotation = Vector2(cos(current_radian + starting_radian), sin(current_radian + starting_radian)).angle() + PI/2
+		return
+	
+	if not $MovingNoise.playing: $MovingNoise.playing = true
 	
 	current_radian += spin_speed
 	
@@ -31,4 +38,5 @@ func spinny_spin() -> void:
 	global_rotation = Vector2(cos(current_radian + starting_radian), sin(current_radian + starting_radian)).angle() + PI/2
 
 func die() -> void:
+	$DeathNoise.play()
 	$AnimationPlayer.play("die")

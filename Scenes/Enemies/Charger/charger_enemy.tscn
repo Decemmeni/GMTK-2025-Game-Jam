@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://dmfqtx2li02ed"]
+[gd_scene load_steps=11 format=3 uid="uid://dmfqtx2li02ed"]
 
 [ext_resource type="Script" uid="uid://bhyqxqevfvrnh" path="res://Components/Hurtbox/hurtbox_component.gd" id="1_ovo1m"]
 [ext_resource type="Script" uid="uid://hxv5h6oolg3h" path="res://Scenes/Enemies/Charger/charger_enemy.gd" id="1_tyem4"]
 [ext_resource type="Script" uid="uid://dxi6uy30u7bic" path="res://Components/Hitbox/hitbox_component.gd" id="2_nlh51"]
+[ext_resource type="AudioStream" uid="uid://baugxxuy2j8l3" path="res://SFX/Enemy Circular Saws Moving.wav" id="4_2x3ok"]
+[ext_resource type="AudioStream" uid="uid://bsiewithefmv7" path="res://SFX/Enemy Circular Saws Dying.wav" id="5_qf7ts"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nlh51"]
 radius = 24.0
@@ -124,5 +126,11 @@ shape = SubResource("CircleShape2D_nlh51")
 libraries = {
 &"": SubResource("AnimationLibrary_2x3ok")
 }
+
+[node name="MovingNoise" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_2x3ok")
+
+[node name="DeathNoise" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_qf7ts")
 
 [connection signal="area_entered" from="HitboxComponent" to="HitboxComponent" method="_on_area_entered"]

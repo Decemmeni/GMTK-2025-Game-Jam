@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://cm202mu741b3a"]
+
+[ext_resource type="AudioStream" uid="uid://63fpbntvb4br" path="res://Music/endscreen.mp3" id="1_nol5u"]
+[ext_resource type="FontFile" uid="uid://m82jt6ing615" path="res://Fonts/PixelatedEleganceRegular-ovyAA.ttf" id="2_310cc"]
+
+[node name="EndScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_nol5u")
+autoplay = true
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -96.0
+offset_top = 16.0
+offset_right = 96.0
+offset_bottom = 63.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_310cc")
+theme_override_font_sizes/font_size = 24
+text = "Thanks for 
+playing!"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -96.0
+offset_top = 80.0
+offset_right = 96.0
+offset_bottom = 127.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_310cc")
+theme_override_font_sizes/font_size = 16
+text = "There were a lot of
+stuff that we
+couldn't add, but
+I hope you enjoyed
+the game!
+
+Sorry for the lame
+end screen :("
+horizontal_alignment = 1

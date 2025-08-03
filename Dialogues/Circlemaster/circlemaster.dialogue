@@ -1,0 +1,7 @@
+~ start
+Circlemaster: Hey...
+Circlemaster: Seems like you're still here...
+Circlemaster: You have drawn...erm...{{LevelManager.current_bubbles}} so far.
+Circlemaster: There are {{LevelManager.max_bubbles - LevelManager.current_bubbles}} still left to be drawn.
+Circlemaster: I wonder what the world will become when its complete.
+=> END

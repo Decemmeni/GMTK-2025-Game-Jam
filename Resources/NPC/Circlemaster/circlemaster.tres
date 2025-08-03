@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="NPCResource" load_steps=4 format=3 uid="uid://cpu8iui48tr66"]
+
+[ext_resource type="Script" uid="uid://dhv1yycvpfhxi" path="res://Resources/ResourceScripts/npc.gd" id="1_nb8cs"]
+[ext_resource type="Resource" uid="uid://bg16i7vccy70a" path="res://Dialogues/Circlemaster/circlemaster.dialogue" id="1_wpith"]
+[ext_resource type="Texture2D" uid="uid://dg7261s443iyx" path="res://Sprites/NPCs/circlemaster.png" id="3_xdj6r"]
+
+[resource]
+script = ExtResource("1_nb8cs")
+texture = ExtResource("3_xdj6r")
+dialog = ExtResource("1_wpith")
+metadata/_custom_type_script = "uid://dhv1yycvpfhxi"

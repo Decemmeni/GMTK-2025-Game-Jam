@@ -6,6 +6,8 @@ class_name QuadShooterEnemy
 
 @onready var bubble : Bubble = get_parent()
 @onready var next_point : Vector2 = global_position
+@onready var ends_children: Array[Node] = $Ends.get_children()
+
 
 var current_rotate : float = 0.0
 const CANNONBALL = preload("res://Scenes/Enemies/Cannon/Cannonball.tscn")
@@ -24,8 +26,8 @@ func shoot() -> void:
 	$AudioStreamPlayer2D.play()
 	for i in 4:
 		var c : CharacterBody2D = CANNONBALL.instantiate()
-		c.global_position = global_position
-		c.velocity = Vector2.RIGHT.rotated(deg_to_rad(90) * i  + current_rotate) * cannon_ball_speed
+		c.global_position = ends_children[i].global_position
+		c.velocity = global_position.direction_to(ends_children[i].global_position) * cannon_ball_speed
 		get_tree().current_scene.add_child(c)
 
 func wander() -> void:

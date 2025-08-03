@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://c1lelxfo70ntn"
+path="res://.godot/imported/tinea.dialogue-3eeff74a3caf2162676ddf56ea6f290d.tres"
+
+[deps]
+
+source_file="res://Dialogues/Latadenata/tinea.dialogue"
+dest_files=["res://.godot/imported/tinea.dialogue-3eeff74a3caf2162676ddf56ea6f290d.tres"]
+
+[params]
+
+defaults=true

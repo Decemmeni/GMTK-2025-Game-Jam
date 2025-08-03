@@ -7,6 +7,33 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_uaxmm"]
 radius = 16.0
 
+[sub_resource type="Animation" id="Animation_ajoh3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
 [sub_resource type="Animation" id="Animation_i2r8j"]
 resource_name = "death"
 tracks/0/type = "value"
@@ -46,33 +73,6 @@ tracks/2/keys = {
 "args": [],
 "method": &"queue_free"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_ajoh3"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ColorRect:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hxnwj"]
@@ -159,6 +159,20 @@ libraries = {
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_ajoh3")
+
+[node name="Ends" type="Node2D" parent="."]
+
+[node name="Marker2D" type="Marker2D" parent="Ends"]
+position = Vector2(0, -32)
+
+[node name="Marker2D2" type="Marker2D" parent="Ends"]
+position = Vector2(32, 0)
+
+[node name="Marker2D3" type="Marker2D" parent="Ends"]
+position = Vector2(0, 32)
+
+[node name="Marker2D4" type="Marker2D" parent="Ends"]
+position = Vector2(-32, 0)
 
 [connection signal="timeout" from="Rotate" to="." method="shoot"]
 [connection signal="timeout" from="Move" to="." method="wander"]

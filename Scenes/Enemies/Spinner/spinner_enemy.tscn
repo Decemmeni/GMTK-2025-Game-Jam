@@ -1,13 +1,42 @@
-[gd_scene load_steps=10 format=3 uid="uid://cv65bitj5nmw0"]
+[gd_scene load_steps=12 format=3 uid="uid://cv65bitj5nmw0"]
 
 [ext_resource type="Script" uid="uid://bkc2mwk6skbeu" path="res://Scenes/Enemies/Spinner/spinner_enemy.gd" id="1_yilcq"]
 [ext_resource type="PackedScene" uid="uid://c4yt1cdfnncjv" path="res://Components/Hitbox/hitbox_component.tscn" id="2_xc5s5"]
 [ext_resource type="Script" uid="uid://bhyqxqevfvrnh" path="res://Components/Hurtbox/hurtbox_component.gd" id="3_mcv7a"]
 [ext_resource type="PackedScene" uid="uid://bf68et1ivv1g1" path="res://Components/Health/health_component.tscn" id="4_26wdl"]
+[ext_resource type="AudioStream" uid="uid://ciyxfw1lw87nb" path="res://SFX/Enemy Spinning Tripwire.wav" id="5_r8ykk"]
+[ext_resource type="AudioStream" uid="uid://cx7wvslnon3ee" path="res://SFX/Enemy Spinning Tripwire Dies.wav" id="6_dw1vx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tmw2c"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xc5s5"]
+
+[sub_resource type="Animation" id="Animation_26wdl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainBody:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MainBody:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_mcv7a"]
 resource_name = "death"
@@ -48,33 +77,6 @@ tracks/2/keys = {
 "args": [],
 "method": &"queue_free"
 }]
-}
-
-[sub_resource type="Animation" id="Animation_26wdl"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MainBody:rotation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("MainBody:scale")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_r8ykk"]
@@ -171,3 +173,9 @@ color = Color(0.326041, 0.501731, 0.335113, 1)
 libraries = {
 &"": SubResource("AnimationLibrary_r8ykk")
 }
+
+[node name="SpinAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_r8ykk")
+
+[node name="DeathAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_dw1vx")

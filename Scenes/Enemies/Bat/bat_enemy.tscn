@@ -1,9 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://bykgi5iv51jij"]
+[gd_scene load_steps=11 format=3 uid="uid://bykgi5iv51jij"]
 
 [ext_resource type="Script" uid="uid://dtspeaaqb8x36" path="res://Scenes/Enemies/Bat/bat_enemy.gd" id="1_onq7r"]
 [ext_resource type="PackedScene" uid="uid://c4yt1cdfnncjv" path="res://Components/Hitbox/hitbox_component.tscn" id="2_ir587"]
 [ext_resource type="Script" uid="uid://bhyqxqevfvrnh" path="res://Components/Hurtbox/hurtbox_component.gd" id="3_ir587"]
 [ext_resource type="Script" uid="uid://bhfuxoi0dasic" path="res://Components/Health/health_component.gd" id="4_135m0"]
+[ext_resource type="AudioStream" uid="uid://bjobsgqf7gkn2" path="res://SFX/Bat Dying.wav" id="5_135m0"]
+[ext_resource type="AudioStream" uid="uid://bkbh83ojv123u" path="res://SFX/Bat Movement.wav" id="6_iad4p"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_d68yv"]
 radius = 20.0998
@@ -134,8 +136,8 @@ libraries = {
 &"": SubResource("AnimationLibrary_135m0")
 }
 
-[node name="WanderChange" type="Timer" parent="."]
-wait_time = 4.0
-autostart = true
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_135m0")
 
-[connection signal="timeout" from="WanderChange" to="." method="change_wander_point"]
+[node name="MovementSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_iad4p")

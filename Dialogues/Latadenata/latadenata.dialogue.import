@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://desbvyfkd4yi6"
+path="res://.godot/imported/latadenata.dialogue-3108486adb8fa4f94c491382e5879567.tres"
+
+[deps]
+
+source_file="res://Dialogues/Latadenata/latadenata.dialogue"
+dest_files=["res://.godot/imported/latadenata.dialogue-3108486adb8fa4f94c491382e5879567.tres"]
+
+[params]
+
+defaults=true

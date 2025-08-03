@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://cibv5joilsffv"
+path="res://.godot/imported/pumpkinmelone.dialogue-db19835fc485b19ae8f633ca0b5bcfe1.tres"
+
+[deps]
+
+source_file="res://Dialogues/Latadenata/pumpkinmelone.dialogue"
+dest_files=["res://.godot/imported/pumpkinmelone.dialogue-db19835fc485b19ae8f633ca0b5bcfe1.tres"]
+
+[params]
+
+defaults=true

@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://djfe5fgkkg5s6"
+path="res://.godot/imported/clint.dialogue-521c210ca1006c023dd462966858d5df.tres"
+
+[deps]
+
+source_file="res://Dialogues/Latadenata/clint.dialogue"
+dest_files=["res://.godot/imported/clint.dialogue-521c210ca1006c023dd462966858d5df.tres"]
+
+[params]
+
+defaults=true

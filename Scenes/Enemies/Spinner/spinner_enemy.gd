@@ -21,7 +21,10 @@ func _physics_process(_delta : float) -> void:
 	draw()
 
 func spin(d : float) -> void:
+	if not LevelManager.player or not LevelManager.player.current_bubble == bubble: return
 	if dying: return
+	if not $SpinAudio.playing: $SpinAudio.playing = true
+	
 	current_radian += rotation_speed * d
 	var blade_radius_offset : Vector2 = global_position.direction_to(global_position + Vector2(cos(current_radian), sin(current_radian))) * collision_shape_2d.shape.radius
 	top_blade.global_position = global_position + Vector2(cos(current_radian), sin(current_radian)) * bubble.collision_shape_2d.shape.radius - blade_radius_offset
@@ -36,4 +39,5 @@ func draw() -> void:
 
 func destroyed() -> void:
 	dying = true
+	$DeathAudio.play()
 	$AnimationPlayer.play("death")

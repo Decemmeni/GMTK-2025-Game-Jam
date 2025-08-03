@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=15
+type="Resource"
+uid="uid://bg16i7vccy70a"
+path="res://.godot/imported/circlemaster.dialogue-55be2c23c3b71a57dd28b6a96eaf30b0.tres"
+
+[deps]
+
+source_file="res://Dialogues/Circlemaster/circlemaster.dialogue"
+dest_files=["res://.godot/imported/circlemaster.dialogue-55be2c23c3b71a57dd28b6a96eaf30b0.tres"]
+
+[params]
+
+defaults=true
