@@ -1,13 +1,50 @@
-[gd_scene load_steps=4 format=3 uid="uid://pthw705u6i3c"]
+[gd_scene load_steps=6 format=3 uid="uid://pthw705u6i3c"]
 
 [ext_resource type="PackedScene" uid="uid://cei5jq8q3g47g" path="res://Components/Projectile/projectile_component.tscn" id="1_knpwr"]
 [ext_resource type="PackedScene" uid="uid://c4yt1cdfnncjv" path="res://Components/Hitbox/hitbox_component.tscn" id="2_vnp3y"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_oxa74"]
 
+[sub_resource type="Animation" id="Animation_vnp3y"]
+resource_name = "death"
+length = 15.0
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(15),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_udkm4"]
+_data = {
+&"death": SubResource("Animation_vnp3y")
+}
+
 [node name="Cannonball" type="CharacterBody2D"]
 collision_layer = 16
 collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.692813, 0.242321, 0.290398, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_oxa74")
@@ -17,10 +54,15 @@ debug_color = Color(0.411851, 0.014551, 0.0167881, 0.42)
 
 [node name="HitboxComponent" parent="." instance=ExtResource("2_vnp3y")]
 collision_mask = 2
-damage = 5.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
 shape = SubResource("CircleShape2D_oxa74")
 debug_color = Color(0.411851, 0.014551, 0.0167881, 0.42)
+
+[node name="AutoDeath" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_udkm4")
+}
+autoplay = "death"
 
 [connection signal="hurt_something" from="HitboxComponent" to="ProjectileComponent" method="projectile_delete"]

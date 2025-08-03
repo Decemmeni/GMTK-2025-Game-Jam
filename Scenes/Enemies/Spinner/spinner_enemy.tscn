@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cv65bitj5nmw0"]
+[gd_scene load_steps=10 format=3 uid="uid://cv65bitj5nmw0"]
 
 [ext_resource type="Script" uid="uid://bkc2mwk6skbeu" path="res://Scenes/Enemies/Spinner/spinner_enemy.gd" id="1_yilcq"]
 [ext_resource type="PackedScene" uid="uid://c4yt1cdfnncjv" path="res://Components/Hitbox/hitbox_component.tscn" id="2_xc5s5"]
@@ -8,6 +8,80 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_tmw2c"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xc5s5"]
+
+[sub_resource type="Animation" id="Animation_mcv7a"]
+resource_name = "death"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainBody:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [0.0, 6.28319]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MainBody:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_26wdl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainBody:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MainBody:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r8ykk"]
+_data = {
+&"RESET": SubResource("Animation_26wdl"),
+&"death": SubResource("Animation_mcv7a")
+}
 
 [node name="SpinnerEnemy" type="Node2D"]
 script = ExtResource("1_yilcq")
@@ -19,12 +93,40 @@ collision_mask = 2
 shape = SubResource("CircleShape2D_tmw2c")
 debug_color = Color(0.545631, 0.0406579, 0.200142, 0.42)
 
+[node name="ColorRect" type="ColorRect" parent="TopBlade"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.215902, 0.215902, 0.215902, 1)
+
 [node name="BottomBlade" parent="." instance=ExtResource("2_xc5s5")]
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomBlade"]
 shape = SubResource("CircleShape2D_tmw2c")
 debug_color = Color(0.545631, 0.0406579, 0.200142, 0.42)
+
+[node name="ColorRect" type="ColorRect" parent="BottomBlade"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.215902, 0.215902, 0.215902, 1)
 
 [node name="Line2D" type="Line2D" parent="."]
 points = PackedVector2Array(0, 0, 0, 0)
@@ -49,4 +151,23 @@ metadata/_custom_type_script = "uid://bhyqxqevfvrnh"
 shape = SubResource("CircleShape2D_xc5s5")
 debug_color = Color(0.616477, 0.480866, 0.63796, 0.42)
 
+[node name="ColorRect" type="ColorRect" parent="MainBody"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.326041, 0.501731, 0.335113, 1)
+
 [node name="HealthComponent" parent="." instance=ExtResource("4_26wdl")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_r8ykk")
+}

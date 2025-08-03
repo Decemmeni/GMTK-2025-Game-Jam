@@ -13,6 +13,9 @@ class_name Player
 @onready var bubble_transition_player: AudioStreamPlayer2D = $BubbleTransitionPlayer
 @onready var follow_collectable_component: FollowCollectable = $FollowCollectableComponent
 
+# GUI
+@onready var progress_bar: ProgressBar = $PlayerGUI/ProgressBar
+
 
 var current_rotation_speed : float = 0.0
 var next_bubble : Bubble
@@ -28,13 +31,14 @@ enum states {
 
 func _ready() -> void:
 	LevelManager.player = self
+	$PlayerGUI/ProgressBar.max_value = $HealthComponent.max_health
 	switch_camera()
 
 func _physics_process(_delta: float) -> void:
 	switch_bubble()
 	play_slide(_delta)
 	move(_delta)
-	
+	update_health_bar()
 
 func move(d : float) -> void:
 	if not current_bubble:
@@ -44,6 +48,7 @@ func move(d : float) -> void:
 	var origin : Vector2 = current_bubble.collision_shape_2d.global_position
 	var inner_layer : Vector2 = Vector2(cos(current_radian), sin(current_radian)) * current_bubble.collision_shape_2d.shape.radius
 	global_position =  origin + inner_layer
+	global_rotation = Vector2(cos(current_radian - PI/2), sin(current_radian - PI/2)).angle()
 	
 	current_radian += current_rotation_speed
 	#current_radian = wrapf(current_radian, -2*PI, 2*PI)
@@ -107,3 +112,13 @@ func play_slide(_d : float) -> void:
 		slide_player.volume_db = move_toward(slide_player.volume_db, abs(current_rotation_speed / max_rotation_speed), 1.5)
 	else:
 		slide_player.volume_db = move_toward(slide_player.volume_db, -40, 1)
+
+func play_hurt() -> void:
+	$HurtNoise.play()
+
+func die() -> void:
+	$DeathNoise.play()
+	LoadingScreen.reset_scene()
+
+func update_health_bar() -> void:
+	progress_bar.value = $HealthComponent.current_health

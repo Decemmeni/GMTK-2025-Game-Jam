@@ -1,0 +1,128 @@
+[gd_scene load_steps=9 format=3 uid="uid://dmfqtx2li02ed"]
+
+[ext_resource type="Script" uid="uid://bhyqxqevfvrnh" path="res://Components/Hurtbox/hurtbox_component.gd" id="1_ovo1m"]
+[ext_resource type="Script" uid="uid://hxv5h6oolg3h" path="res://Scenes/Enemies/Charger/charger_enemy.gd" id="1_tyem4"]
+[ext_resource type="Script" uid="uid://dxi6uy30u7bic" path="res://Components/Hitbox/hitbox_component.gd" id="2_nlh51"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nlh51"]
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tyem4"]
+radius = 16.0
+
+[sub_resource type="Animation" id="Animation_o30qc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Polygon2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Polygon2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_tyem4"]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Polygon2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [0.0, 6.28319]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Polygon2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1e-05, 1e-05)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.966667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2x3ok"]
+_data = {
+&"RESET": SubResource("Animation_o30qc"),
+&"die": SubResource("Animation_tyem4")
+}
+
+[node name="ChargerEnemy" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_tyem4")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+position = Vector2(0, -16)
+color = Color(0.176419, 0.176419, 0.176419, 1)
+offset = Vector2(-6.655, 0)
+polygon = PackedVector2Array(-8, -16, -8, 16, 22.655, 16)
+
+[node name="HurtboxComponent" type="Area2D" parent="."]
+position = Vector2(0, -16)
+collision_layer = 64
+collision_mask = 0
+script = ExtResource("1_ovo1m")
+metadata/_custom_type_script = "uid://bhyqxqevfvrnh"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtboxComponent"]
+shape = SubResource("CircleShape2D_nlh51")
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+position = Vector2(-32, -16)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_nlh51")
+metadata/_custom_type_script = "uid://dxi6uy30u7bic"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+position = Vector2(40, 0)
+shape = SubResource("CircleShape2D_tyem4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("CircleShape2D_nlh51")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_2x3ok")
+}
+
+[connection signal="area_entered" from="HitboxComponent" to="HitboxComponent" method="_on_area_entered"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://clcwvobqqgbgo"]
+[gd_scene load_steps=13 format=3 uid="uid://clcwvobqqgbgo"]
 
 [ext_resource type="Script" uid="uid://c4kkfminulbk" path="res://Scenes/Player/player.gd" id="1_uvnfx"]
 [ext_resource type="PackedScene" uid="uid://bf68et1ivv1g1" path="res://Components/Health/health_component.tscn" id="2_a3d8c"]
@@ -6,6 +6,8 @@
 [ext_resource type="AudioStream" uid="uid://c8b2dbwr5dfv8" path="res://SFX/Slide.wav" id="4_mtuoh"]
 [ext_resource type="AudioStream" uid="uid://brs4ujxien7q" path="res://SFX/Transition.wav" id="5_htcer"]
 [ext_resource type="PackedScene" uid="uid://dwt01ijkpc6y1" path="res://Components/FollowCollectable/follow_collectable_component.tscn" id="6_dd0ac"]
+[ext_resource type="AudioStream" uid="uid://cktwjn3jia1vx" path="res://SFX/Player Damage.wav" id="7_0u5uq"]
+[ext_resource type="AudioStream" uid="uid://jsg367nywtvm" path="res://SFX/Player Death.wav" id="8_jlvik"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_uvnfx"]
 radius = 5.0
@@ -14,10 +16,38 @@ height = 16.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_uvnfx"]
 radius = 9.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jlvik"]
+bg_color = Color(0.956783, 0.928401, 0.957232, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gk6dx"]
+bg_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_uvnfx")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -32.0
+offset_right = 8.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_uvnfx")
@@ -62,6 +92,31 @@ volume_db = 5.0
 
 [node name="FollowCollectableComponent" parent="." instance=ExtResource("6_dd0ac")]
 
+[node name="HurtNoise" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_0u5uq")
+volume_db = 5.0
+
+[node name="PlayerGUI" type="CanvasLayer" parent="."]
+
+[node name="ProgressBar" type="ProgressBar" parent="PlayerGUI"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 19.0
+grow_horizontal = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_jlvik")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gk6dx")
+value = 50.0
+show_percentage = false
+
+[node name="DeathNoise" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("8_jlvik")
+volume_db = 5.0
+
 [connection signal="switched_bubble" from="." to="." method="switch_camera"]
 [connection signal="area_entered" from="BubbleDetector" to="." method="_on_bubble_detector_area_entered"]
 [connection signal="area_exited" from="BubbleDetector" to="." method="_on_bubble_detector_area_exited"]
+[connection signal="damaged" from="HealthComponent" to="." method="play_hurt"]
+[connection signal="died" from="HealthComponent" to="." method="die"]

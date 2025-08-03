@@ -13,11 +13,12 @@ func _ready() -> void:
 	current_health = max_health
 
 func _set_health(new_hp : float) -> void:
-	current_health = new_hp
 	if new_hp < 0:
 		died.emit()
 	elif new_hp < current_health:
 		damaged.emit()
 	elif new_hp > current_health:
 		healed.emit()
+	current_health = new_hp
+	
 	
